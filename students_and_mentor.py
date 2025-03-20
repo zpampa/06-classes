@@ -91,70 +91,85 @@ class Student:
         return self.calculate_average_grade() == other.calculate_average_grade()
 
 
-# Пример использования
-# Создаем студента
-best_student = Student('Ruoy', 'Eman', 'your_gender')
-best_student.courses_in_progress += ['Python', 'Git']
-best_student.finished_courses += ['Введение в программирование']
+# Функция для подсчета средней оценки за домашние задания по всем студентам в рамках курса
+def calculate_average_hw_grade(students, course):
+    total_grades = []
+    for student in students:
+        if course in student.grades:
+            total_grades.extend(student.grades[course])
+    if not total_grades:
+        return 0
+    return sum(total_grades) / len(total_grades)
 
-# Создаем эксперта (Reviewer)
-cool_reviewer = Reviewer('Some', 'Buddy')
-cool_reviewer.courses_attached += ['Python']
 
-# Эксперт выставляет оценки студенту
-cool_reviewer.rate_hw(best_student, 'Python', 10)
-cool_reviewer.rate_hw(best_student, 'Python', 9)
-cool_reviewer.rate_hw(best_student, 'Python', 8)
+# Функция для подсчета средней оценки за лекции всех лекторов в рамках курса
+def calculate_average_lecture_grade(lecturers, course):
+    total_grades = []
+    for lecturer in lecturers:
+        if course in lecturer.grades:
+            total_grades.extend(lecturer.grades[course])
+    if not total_grades:
+        return 0
+    return sum(total_grades) / len(total_grades)
 
-# Создаем лектора (Lecturer)
-cool_lecturer = Lecturer('Another', 'Person')
-cool_lecturer.courses_attached += ['Python']
 
-# Студент выставляет оценки лектору
-best_student.rate_lecturer(cool_lecturer, 'Python', 10)
-best_student.rate_lecturer(cool_lecturer, 'Python', 9)
-best_student.rate_lecturer(cool_lecturer, 'Python', 8)
+# Создаем студентов
+student1 = Student('Ruoy', 'Eman', 'male')
+student1.courses_in_progress += ['Python']
+student1.finished_courses += ['Введение в программирование']
+
+student2 = Student('Alice', 'Smith', 'female')
+student2.courses_in_progress += ['Python', 'Git']
+student2.finished_courses += ['Введение в программирование']
+
+# Создаем лекторов
+lecturer1 = Lecturer('Some', 'Buddy')
+lecturer1.courses_attached += ['Python']
+
+lecturer2 = Lecturer('Another', 'Person')
+lecturer2.courses_attached += ['Python', 'Git']
+
+# Создаем экспертов
+reviewer1 = Reviewer('John', 'Doe')
+reviewer1.courses_attached += ['Python']
+
+reviewer2 = Reviewer('Jane', 'Doe')
+reviewer2.courses_attached += ['Git']
+
+# Эксперты выставляют оценки студентам
+reviewer1.rate_hw(student1, 'Python', 10)
+reviewer1.rate_hw(student1, 'Python', 9)
+reviewer1.rate_hw(student1, 'Python', 8)
+
+reviewer1.rate_hw(student2, 'Python', 7)
+reviewer1.rate_hw(student2, 'Python', 6)
+reviewer1.rate_hw(student2, 'Python', 5)
+
+# Студенты выставляют оценки лекторам
+student1.rate_lecturer(lecturer1, 'Python', 10)
+student1.rate_lecturer(lecturer1, 'Python', 9)
+student1.rate_lecturer(lecturer1, 'Python', 8)
+
+student2.rate_lecturer(lecturer2, 'Python', 7)
+student2.rate_lecturer(lecturer2, 'Python', 6)
+student2.rate_lecturer(lecturer2, 'Python', 5)
 
 # Выводим информацию
-print(cool_reviewer)
-# Имя: Some
-# Фамилия: Buddy
+print(student1)
+print(student2)
+print(lecturer1)
+print(lecturer2)
+print(reviewer1)
+print(reviewer2)
 
-print(cool_lecturer)
-# Имя: Another
-# Фамилия: Person
-# Средняя оценка за лекции: 9.0
+# Сравниваем студентов и лекторов
+print(student1 > student2)  # True, если средняя оценка student1 больше
+print(lecturer1 < lecturer2)  # True, если средняя оценка lecturer1 меньше
 
-print(best_student)
-# Имя: Ruoy
-# Фамилия: Eman
-# Средняя оценка за домашние задания: 9.0
-# Курсы в процессе изучения: Python, Git
-# Завершенные курсы: Введение в программирование
+# Подсчет средней оценки за домашние задания по курсу 'Python'
+average_hw_grade = calculate_average_hw_grade([student1, student2], 'Python')
+print(f"Средняя оценка за домашние задания по курсу 'Python': {average_hw_grade:.1f}")
 
-# Сравнение студентов и лекторов
-student1 = Student('Alice', 'Smith', 'female')
-student1.courses_in_progress += ['Python']
-cool_reviewer.rate_hw(student1, 'Python', 7)
-cool_reviewer.rate_hw(student1, 'Python', 8)
-
-student2 = Student('Bob', 'Johnson', 'male')
-student2.courses_in_progress += ['Python']
-cool_reviewer.rate_hw(student2, 'Python', 9)
-cool_reviewer.rate_hw(student2, 'Python', 10)
-
-print(student1 < student2)  # True (7.5 < 9.5)
-print(student1 == student2)  # False
-
-lecturer1 = Lecturer('John', 'Doe')
-lecturer1.courses_attached += ['Python']
-best_student.rate_lecturer(lecturer1, 'Python', 8)
-best_student.rate_lecturer(lecturer1, 'Python', 7)
-
-lecturer2 = Lecturer('Jane', 'Doe')
-lecturer2.courses_attached += ['Python']
-best_student.rate_lecturer(lecturer2, 'Python', 9)
-best_student.rate_lecturer(lecturer2, 'Python', 10)
-
-print(lecturer1 > lecturer2)  # False (7.5 < 9.5)
-print(lecturer1 == lecturer2)  # False
+# Подсчет средней оценки за лекции по курсу 'Python'
+average_lecture_grade = calculate_average_lecture_grade([lecturer1, lecturer2], 'Python')
+print(f"Средняя оценка за лекции по курсу 'Python': {average_lecture_grade:.1f}")
